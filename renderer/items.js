@@ -1,3 +1,4 @@
+const { shell } = require('electron')
 const fs = require('fs')
 
 const items = document.getElementById('items')
@@ -19,17 +20,17 @@ exports.delete = itemIndex => {
   this.storage.splice(itemIndex, 1)
   this.save()
   if (this.storage.length) {
-    let newSelectedItemIndex = itemIndex === 0 ? 0 : itemIndex - 1
+    let = newSelectedItemIndex = (itemIndex === 0) ? 0 : itemIndex - 1
     document.getElementsByClassName('read-item')[newSelectedItemIndex].classList.add('selected')
   }
 }
 
 exports.getSelectedItem = () => {
-  let currenItem = document.querySelector('.read-item.selected')
+  let currentItem = document.getElementsByClassName('read-item selected')[0]
   let itemIndex = 0
-  let child = currenItem
+  let child = currentItem
   while ((child = child.previousElementSibling) != null) itemIndex++
-  return {node: currenItem, index: itemIndex}
+  return {node: currentItem, index: itemIndex}
 }
 
 exports.storage = JSON.parse(localStorage.getItem('readit-items')) || []
@@ -44,28 +45,37 @@ exports.select = event => {
 }
 
 exports.changeSelection = direction => {
-  let currenItem = this.getSelectedItem()
-  if (direction === 'ArrowUp' && currenItem.previousElementSibling) {
-    currenItem.node.classList.remove('selected')
-    currenItem.node.previousElementSibling.classList.add('selected')
-  } else if (direction === 'ArrowDown' && currenItem.node.nextElementSibling) {
-    currenItem.node.classList.remove('selected')
-    currenItem.node.nextElementSibling.classList.add('selected')
+  let currentItem = this.getSelectedItem()
+  if (direction === 'ArrowUp' && currentItem.node.previousElementSibling) {
+    currentItem.node.classList.remove('selected')
+    currentItem.node.previousElementSibling.classList.add('selected')
+  } else if (direction === 'ArrowDown' && currentItem.node.nextElementSibling) {
+    currentItem.node.classList.remove('selected')
+    currentItem.node.nextElementSibling.classList.add('selected')
   }
 }
 
 exports.open = () => {
   if (!this.storage.length) return
-  let selectedItem =  this.getSelectedItem()
-  let contentUrl = selectedItem.node.dataset.url
-  let readerWin = window.open(contentUrl, '', `
-    maxWidth=2000, maxHeight=2000,
-    width=1200, height=800,
+  let selectedItem = this.getSelectedItem()
+  let contentURL = selectedItem.node.dataset.url
+  let readerWin = window.open(contentURL, '', `
+    maxWidth=2000,
+    maxHeight=2000,
+    width=1200,
+    height=800,
     backgroundColor=#DEDEDE,
     nodeIntegration=0,
     contextIsolation=1
   `)
-  readerWin.eval(readerJS.replace('{{index}}', selectedItem.index))
+  readerWin.eval( readerJS.replace('{{index}}', selectedItem.index) )
+}
+
+exports.openNative = () => {
+  if (!this.storage.length) return
+  let selectedItem = this.getSelectedItem()
+  let contentURL = selectedItem.node.dataset.url
+  shell.openExternal(contentURL)
 }
 
 exports.addItem = (item, isNew) => {

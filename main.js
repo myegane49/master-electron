@@ -2,6 +2,7 @@
 const {app, BrowserWindow, ipcMain} = require('electron')
 const windowStateKeeper = require('electron-window-state')
 const readItem = require('./readItem')
+const appMenu = require('./menu')
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -24,6 +25,8 @@ function createWindow () {
     minWidth: 350, maxWidth: 650, minHeight: 300,
     webPreferences: { nodeIntegration: true }
   })
+
+  appMenu(mainWindow.webContents)
 
   mainWindow.loadFile('./renderer/main.html')
 
