@@ -1,26 +1,48 @@
 {
-  "name": "master-electron",
+  "name": "Readit",
   "version": "1.0.0",
-  "description": "Master Electron Course Code",
+  "description": "Master Electron Project",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
     "watch": "nodemon --exec electron .",
-    "reset": "git reset --hard"
+    "reset": "git reset --hard",
+    "build": "electron-builder --linux",
+    "win-cert": "electron-builder create-self-signed-cert -p stackacademytv",
+    "release": "electron-builder -mwl --publish 'onTagOrDraft'"
   },
   "repository": "https://github.com/stackacademytv/master-electron",
+  "home": "https://github.com/stackacademytv/master-electron",
   "keywords": [
     "Electron",
     "Master Electron",
     "demo"
   ],
-  "author": "GitHub, Stackacademytv",
+  "author": "Stackacademytv",
   "license": "CC0-1.0",
   "devDependencies": {
     "electron": "^9.0.0",
+    "electron-builder": "^22.10.5",
     "nodemon": "^2.0.0"
   },
   "dependencies": {
+    "electron-updater": "^4.3.8",
     "electron-window-state": "^5.0.3"
+  },
+  "build": {
+    "appId": "com.stackacademytv.readit",
+    "copyright": "Copyright 2019 Stackacademy.tv",
+    "mac": {},
+    "win": {
+      "target": "zip",
+      "publisherName": "stackacademytv"
+    },
+    "linux": {
+      "category": "Education",
+      "target": "AppImage"
+    },
+    "publish": {
+      "provider": "github"
+    }
   }
 }

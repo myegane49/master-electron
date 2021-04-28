@@ -3,6 +3,7 @@ const {app, BrowserWindow, ipcMain} = require('electron')
 const windowStateKeeper = require('electron-window-state')
 const readItem = require('./readItem')
 const appMenu = require('./menu')
+const updater = require('./updater')
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -15,6 +16,8 @@ ipcMain.on('new-item', (event, itemUrl) => {
 })
 
 function createWindow () {
+  setTimeout(updater, 3000)
+
   const state = windowStateKeeper({
     defaultWidth: 500, defaultHeight: 650
   })
@@ -32,7 +35,7 @@ function createWindow () {
 
   state.manage(mainWindow)
 
-  mainWindow.webContents.openDevTools();
+  // mainWindow.webContents.openDevTools();
 
   mainWindow.on('closed',  () => {
     mainWindow = null
